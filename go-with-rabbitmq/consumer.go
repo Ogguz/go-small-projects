@@ -2,25 +2,13 @@ package main
 
 import (
 	"fmt"
-	"github.com/streadway/amqp"
+	"go-small-projects/go-with-rabbitmq/src"
 	"log"
 )
 
 func main() {
-	conn, err := amqp.Dial("amqp://localhost:5672")
-	if err != nil {
-		log.Fatal(err)
-	}
-	log.Println("Successfully connected to rabbitmq...")
-	defer conn.Close()
 
-    ch, err := conn.Channel()
-    if err != nil {
-    	log.Fatal(err)
-	}
-	defer ch.Close()
-
-    messages, err := ch.Consume(
+    messages, err := src.Connect().Consume(
     	"BusyBoy",
     	"",
     	true,
@@ -29,6 +17,9 @@ func main() {
     	false,
     	nil,
     	)
+    if err != nil {
+    	log.Fatal(err)
+	}
 
     forever := make(chan bool)
     go func() {

@@ -3,32 +3,18 @@ package main
 import (
 	"fmt"
 	"github.com/streadway/amqp"
+	"go-small-projects/go-with-rabbitmq/src"
 	"log"
 	"time"
 )
 
 func main() {
 
-    log.Println("Starting rabbitmq connection...")
-
-    // connect to rabbitmq broker
-    conn, err := amqp.Dial("amqp://localhost:5672") // buraya test de yaz
-    if err != nil {
-    	log.Fatal(err)
-	}
-	log.Println("Successfully connected to rabbitmq")
-	defer conn.Close()
-
-	// open up a channel
-	ch, err := conn.Channel()
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer ch.Close()
-	log.Println("Channel created successfully")
+	src.Connect()
+	defer src.Connect().Close()
 
 	// declare the queue
-	que, err := ch.QueueDeclare("BusyBoy",false,true,false,true,nil)
+	que, err := src.Connect().QueueDeclare("BusyBoy",false,true,false,true,nil)
 	fmt.Println(que)
 	if err != nil {
 		log.Panic(err)
@@ -36,7 +22,7 @@ func main() {
 	log.Println("queue declared successfully")
 
     // Oh be finally publish them :)
-    err = ch.Publish(
+    err = src.Connect().Publish(
     	"",
     	"BusyBoy",
     	true,
