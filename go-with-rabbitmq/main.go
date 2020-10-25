@@ -17,7 +17,7 @@ func main() {
     	log.Fatal(err)
 	}
 	log.Println("Successfully connected to rabbitmq")
-	defer conn.Close()  // TODO hem ch hem conn'a gerek var mi? sor
+	defer conn.Close()
 
 	// open up a channel
 	ch, err := conn.Channel()

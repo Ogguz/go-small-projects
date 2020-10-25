@@ -1,4 +1,4 @@
-module go-101-projects/go-with-rabbitmq
+module go-small-projects/go-with-rabbitmq
 
 go 1.15
 
